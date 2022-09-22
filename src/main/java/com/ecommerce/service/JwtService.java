@@ -54,7 +54,7 @@ public class JwtService implements UserDetailsService {
 
 	private void authenticate(String username, String userPassword) throws Exception {
 		try {
-			//authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, userPassword));
+			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, userPassword));
 		} catch (DisabledException e) {
 			throw new Exception("user is disabled");
 		} catch (BadCredentialsException e) {
