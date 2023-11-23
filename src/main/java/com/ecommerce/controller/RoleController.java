@@ -20,7 +20,6 @@ public class RoleController {
 	@PostMapping({"/createNewRole"})
 	@ResponseBody
 	public Role createNewRole(@RequestBody Role role) {
-		System.out.println("in request body");
 		return roleService.createNewRole(role);
 	}
 

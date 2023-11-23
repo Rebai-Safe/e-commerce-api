@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Arrays;
 
 @Entity
 @Table(name="image_model")
@@ -19,11 +20,10 @@ public class ImageModel {
 	@Column(length = 5000000)
 	private byte[] picbyte;
 	
-  public ImageModel() {
+  	public ImageModel() {
 	}
 	
 	public ImageModel(String name, String type, byte[] picbyte) {
-		
 		this.name = name;
 		this.type = type;
 		this.picbyte = picbyte;
@@ -60,6 +60,14 @@ public class ImageModel {
 	public void setPicbyte(byte[] picbyte) {
 		this.picbyte = picbyte;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "ImageModel{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", type='" + type + '\'' +
+				", picbyte=" + Arrays.toString(picbyte) +
+				'}';
+	}
 }

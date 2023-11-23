@@ -38,7 +38,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
 	@Autowired
 	private JwtRequestFilter jwtRequestFilter; 
 	
-	
 
 	@Bean
 	@Override
@@ -50,7 +49,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.cors();
 		httpSecurity.csrf().disable()
-		.authorizeRequests().antMatchers("/authenticate").permitAll()
+		.authorizeRequests().antMatchers("/authenticate","/registerUser", "/get-products", "/get-product-byId/{productId}").permitAll()
         .antMatchers(HttpHeaders.ALLOW).permitAll()
         .anyRequest().authenticated()
         .and()
