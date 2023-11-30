@@ -5,10 +5,12 @@ import com.ecommerce.dao.CartDao;
 import com.ecommerce.dao.ProductDao;
 import com.ecommerce.dao.CartItemDao;
 import com.ecommerce.dao.UserDao;
+import com.ecommerce.dto.CartDto;
 import com.ecommerce.entity.Cart;
 import com.ecommerce.entity.Product;
 import com.ecommerce.entity.CartItem;
 import com.ecommerce.entity.User;
+import com.ecommerce.mapper.CartMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +36,12 @@ public class CartService {
     @Autowired
     private CartItemDao cartItemDao;
 
+    @Autowired
+    private CartMapper cartMapper;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(CartService.class);
 
-    public Cart addToCart(Integer productId, Integer quantity) {
+    public CartDto addToCart(Integer productId, Integer quantity) {
         LOGGER.info("Adding item to cart");
         Product product = productDao.findById(productId).get();
         String currentUser = JwtRequestFilter.CURRENT_USER;
@@ -59,7 +64,8 @@ public class CartService {
                 } else{
                     cartItems.get(0).setQuantity(quantity);
                 }
-                return cartDao.save(userCart);
+                return cartMapper.cartToCartDto(cartDao.save(userCart));
+
             }else {
                 //create new cart
                 Cart newCart = new Cart();
@@ -71,16 +77,19 @@ public class CartService {
                 newCart.setCartItems(cartItems);
                 newCart.setUser(user);
                 //return  the newly created cart
-                return cartDao.save(newCart);
+                return cartMapper.cartToCartDto(cartDao.save(newCart));
             }
         }
        return null;
     }
 
-    public Cart getCart(){
+    public CartDto getCart(){
         String currentUser = JwtRequestFilter.CURRENT_USER;
         User user = userDao.findById(currentUser).get();
-        return cartDao.findByUser(user);
+        Cart cart = cartDao.findByUser(user);
+        if(cart != null)
+             return cartMapper.cartToCartDto(cart);
+        return null;
     }
     @Transactional
     public void deleteCartItem(Integer cartId, Integer productId){

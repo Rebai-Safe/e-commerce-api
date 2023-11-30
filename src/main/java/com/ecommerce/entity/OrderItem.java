@@ -10,7 +10,7 @@ public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
     @ManyToOne
     private Product product;
     private int quantity;
@@ -18,7 +18,7 @@ public class OrderItem {
     @JsonIgnore
     private Order order;
 
-    public OrderItem(Integer id, Product product, int quantity, Order order) {
+    public OrderItem(Long id, Product product, int quantity, Order order) {
         this.id = id;
         this.product = product;
         this.quantity = quantity;
@@ -28,11 +28,11 @@ public class OrderItem {
     public OrderItem() {
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

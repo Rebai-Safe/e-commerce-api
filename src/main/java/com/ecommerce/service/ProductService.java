@@ -7,8 +7,10 @@ import java.util.stream.Collectors;
 import com.ecommerce.configuration.JwtRequestFilter;
 import com.ecommerce.dao.CartDao;
 import com.ecommerce.dao.UserDao;
+import com.ecommerce.dto.ProductDto;
 import com.ecommerce.entity.Cart;
 import com.ecommerce.entity.User;
+import com.ecommerce.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,41 +30,33 @@ public class ProductService {
 
 	@Autowired
 	CartDao cartDao;
+
+	@Autowired
+	ProductMapper productMapper;
 	
-	public Product addProduct(Product product) {
-		return productDao.save(product);
+	public ProductDto addProduct(Product product) {
+		return productMapper.productToProductDto(productDao.save(product));
 	}
 
-	public Product getProductById(Integer productId){
-		return productDao.findById(productId).get();
+	public ProductDto getProductById(Integer productId){
+		return productMapper.productToProductDto(productDao.findById(productId).get());
 	}
-	public List<Product> getProducts(int pageNumber, String searchKeyword){
+	public List<ProductDto> getProducts(int pageNumber, String searchKeyword){
 		Pageable pageable = PageRequest.of(pageNumber, 4);
+		List<ProductDto> productDtos = new ArrayList<>();
+		List<Product> products;
 		if(searchKeyword.isEmpty()){
-			return productDao.findAll(pageable);
+			products = productDao.findAll(pageable);
 		}else{
-			return productDao.findByProductNameContainingIgnoreCaseOrProductDescriptionContainingIgnoreCase(searchKeyword, searchKeyword, pageable);
+			products= productDao.findByProductNameContainingIgnoreCaseOrProductDescriptionContainingIgnoreCase(searchKeyword, searchKeyword, pageable);
 		}
-
+		products.forEach(product -> {
+			productDtos.add(productMapper.productToProductDto(product));
+		});
+		return productDtos;
 	}
-	
 	public void deleteProduct(Integer id) {
 		productDao.deleteById(id);
 	}
 
-    public List<Product> getProductDetails(boolean isSingleProductCheckout, Integer productId) {
-		if(isSingleProductCheckout && productId != 0){
-			//we are going to buy a single product
-			List<Product> list = new ArrayList<>();
-			Product product = productDao.findById(productId).get();
-			list.add(product);
-			return list;
-		}else{
-			//we are going to checkout entire cart
-			String currentUser = JwtRequestFilter.CURRENT_USER;
-			User user = userDao.findById(currentUser).get();
-			Cart cart = cartDao.findByUser(user);
-			return null;
-		}
-    }
 }
