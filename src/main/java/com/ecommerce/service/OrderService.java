@@ -7,9 +7,11 @@ import com.ecommerce.dao.ProductDao;
 import com.ecommerce.dao.UserDao;
 import com.ecommerce.entity.*;
 import com.ecommerce.enums.OrderStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -29,37 +31,33 @@ public class OrderService {
     @Autowired
     private CartDao cartDao;
 
-    public void placeOrder(OrderPlaceRequest orderPlaceRequest,
-                           boolean isCartCheckout){
-        List<OrderProductQuantity> orderProductQuantityList = orderPlaceRequest.getOrderProductQuantityList();
+    private static final Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
+
+    @Transactional
+    public Order placeOrder(Order order){
         String currentUser = JwtRequestFilter.CURRENT_USER;
-        Users user = userDao.findById(currentUser).get();
+        User user = userDao.findById(currentUser).get();
+        order.setUser(user);
+        order.setOrderStatus(OrderStatus.PLACED.name());
 
-        for(OrderProductQuantity orderProductQuantity: orderProductQuantityList){
-            Product product = productDao.findById(orderProductQuantity.getProductId()).get();
+        //setting order id for order items
+        order.getOrderItems().forEach(orderItem -> orderItem.setOrder(order));
+        LOGGER.info("Placing order: "+order);
 
-            Order order = new Order(
-                 orderPlaceRequest.getFullName(),
-                 orderPlaceRequest.getFullAddress(),
-                 orderPlaceRequest.getContactNumber(),
-                 orderPlaceRequest.getAltContactNumber(),
-                    OrderStatus.PLACED.name(),
-                    product.getProductDiscountedPrice() * orderProductQuantity.getQuantity(),
-                    product,
-                    user
-            );
-            orderDao.save(order);
-        }
         //empty the cart
-        if(isCartCheckout){
-            List<Cart> carts = cartDao.findByUser(user);
-            carts.stream().forEach(c -> cartDao.delete(c));
-        }
+        Cart currentUserCart = cartDao.findByUser(user);
+        cartDao.delete(currentUserCart);
+
+        return orderDao.save(order);
     }
 
-    public List<Order> getOrders(){
+    public Order getOrderById(Integer orderId){
+        return orderDao.findById(orderId).get();
+    }
+
+    public List<Order> getUserOrders(){
         String currentUser = JwtRequestFilter.CURRENT_USER;
-        Users user = userDao.findById(currentUser).get();
+        User user = userDao.findById(currentUser).get();
 
         return orderDao.findByUser(user);
     }

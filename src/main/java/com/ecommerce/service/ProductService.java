@@ -8,7 +8,7 @@ import com.ecommerce.configuration.JwtRequestFilter;
 import com.ecommerce.dao.CartDao;
 import com.ecommerce.dao.UserDao;
 import com.ecommerce.entity.Cart;
-import com.ecommerce.entity.Users;
+import com.ecommerce.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -60,9 +60,9 @@ public class ProductService {
 		}else{
 			//we are going to checkout entire cart
 			String currentUser = JwtRequestFilter.CURRENT_USER;
-			Users user = userDao.findById(currentUser).get();
-			List<Cart> carts = cartDao.findByUser(user);
-			return carts.stream().map(Cart::getProduct).collect(Collectors.toList());
+			User user = userDao.findById(currentUser).get();
+			Cart cart = cartDao.findByUser(user);
+			return null;
 		}
     }
 }

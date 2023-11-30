@@ -15,7 +15,6 @@ public class Product {
 	private String productDescription;
 	private Double productDiscountedPrice;
 	private Double productActualPrice;
-
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "product_images", joinColumns = 
           { @JoinColumn(name = "product_id") }, 

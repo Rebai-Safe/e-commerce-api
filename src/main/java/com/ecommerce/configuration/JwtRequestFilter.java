@@ -7,6 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,11 +30,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 	@Autowired
 	private JwtUtil jwtUtil;
-
 	
 	@Autowired
 	private JwtService jwtService;
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(JwtRequestFilter.class);
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
@@ -48,12 +50,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 				userName = jwtUtil.getUserNameFromToken(jwtToken);
 				CURRENT_USER = userName;
 			} catch (IllegalArgumentException e) {
-				System.out.println("unable to get JWT token");
+				LOGGER.error("Unable to get JWT token");
 			} catch (ExpiredJwtException e) {
-				System.out.println("jwt token is expired");
+				LOGGER.error("Jwt token is expired");
 			}
 		} else {
-			System.out.println("Jwt token does not start with Bearer");
+			LOGGER.info("Jwt token does not start with Bearer");
 		}
 
 		if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {

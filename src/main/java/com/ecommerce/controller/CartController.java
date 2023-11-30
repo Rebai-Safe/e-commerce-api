@@ -15,20 +15,20 @@ public class CartController {
     private CartService cartService;
 
     @PreAuthorize("hasRole('USER')")
-    @GetMapping({"/addToCart/{productId}"})
-    public Cart addToCart(@PathVariable Integer productId){
-        return cartService.addToCart(productId);
+    @GetMapping({"/addToCart/{productId}/{quantity}"})
+    public Cart addToCart(@PathVariable Integer productId,@PathVariable Integer quantity){
+        return cartService.addToCart(productId, quantity);
     }
 
     @PreAuthorize("hasRole('USER')")
-    @GetMapping({"/getCarts"})
-    public List<Cart> getCarts(){
-        return cartService.getCarts();
+    @GetMapping({"/getCart"})
+    public Cart getCart(){
+        return cartService.getCart();
     }
 
     @PreAuthorize("hasRole('USER')")
-    @DeleteMapping({"/deleteItem/{cartId}"})
-    public void DeleteCartItem(@PathVariable Integer cartId){
-        this.cartService.deleteCartItem(cartId);
+    @DeleteMapping({"/deleteItem/{cartId}/{productId}"})
+    public void DeleteCartItem(@PathVariable Integer cartId, @PathVariable Integer productId){
+        this.cartService.deleteCartItem(cartId, productId);
     }
 }

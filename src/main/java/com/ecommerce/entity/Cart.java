@@ -1,6 +1,7 @@
 package com.ecommerce.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Cart {
@@ -8,19 +9,11 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer cartId;
+    @OneToMany(mappedBy = "cart", cascade=CascadeType.ALL)
+    private List<CartItem> cartItems;
     @OneToOne
-    private Product product;
-    @OneToOne
-    private Users user;
+    private User user;
 
-    public Cart(Product product, Users user) {
-        this.product = product;
-        this.user = user;
-    }
-
-    public Cart() {
-
-    }
 
     public Integer getCartId() {
         return cartId;
@@ -30,19 +23,28 @@ public class Cart {
         this.cartId = cartId;
     }
 
-    public Product getProduct() {
-        return product;
+    public List<CartItem> getCartItems() {
+        return cartItems;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setCartItems(List<CartItem> cartItems) {
+        this.cartItems = cartItems;
     }
 
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Users user) {
+    public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "Cart{" +
+                "cartId=" + cartId +
+                ", productItems=" + cartItems +
+                ", user=" + user +
+                '}';
     }
 }

@@ -1,38 +1,33 @@
-package com.ecommerce.entity;
+package com.ecommerce.model;
 
+
+import com.ecommerce.dto.UserDto;
 
 
 public class JwtResponse {
 
-	private Users user;
+	private UserDto user;
 	private String  jwtToken;
-	
-	
-	public JwtResponse(Users user, String jwtToken) {
+
+
+	public JwtResponse(UserDto user, String jwtToken) {
 		this.user = user;
 		this.jwtToken = jwtToken;
 	}
 
-
-	public Users getUser() {
+	public UserDto getUser() {
 		return user;
 	}
 
-
-	public void setUser(Users user) {
+	public void setUser(UserDto user) {
 		this.user = user;
 	}
-
 
 	public String getJwtToken() {
 		return jwtToken;
 	}
 
-
 	public void setJwtToken(String jwtToken) {
 		this.jwtToken = jwtToken;
 	}
-
-	
-	
 }

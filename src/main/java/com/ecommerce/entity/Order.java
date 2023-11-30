@@ -2,6 +2,7 @@ package com.ecommerce.entity;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="orders")
@@ -10,30 +11,22 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer orderId;
-    private String orderFullName;
-    private String orderFullAddress;
-    private String orderContactNumber;
-    private String orderAltContactNumber;
     private String orderStatus;
     private Double orderAmount;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderItem> orderItems;
     @OneToOne
-    private Product product;
-    @OneToOne
-    private Users user;
+    private User user;
 
-    public Order(String orderFullName, String orderFullAddress, String orderContactNumber, String orderAltContactNumber, String orderStatus, Double orderAmount, Product product, Users user) {
-        this.orderFullName = orderFullName;
-        this.orderFullAddress = orderFullAddress;
-        this.orderContactNumber = orderContactNumber;
-        this.orderAltContactNumber = orderAltContactNumber;
+    public Order(Integer orderId, String orderStatus, Double orderAmount, List<OrderItem> orderItems, User user) {
+        this.orderId = orderId;
         this.orderStatus = orderStatus;
         this.orderAmount = orderAmount;
-        this.product = product;
+        this.orderItems = orderItems;
         this.user = user;
     }
 
     public Order() {
-
     }
 
     public Integer getOrderId() {
@@ -42,38 +35,6 @@ public class Order {
 
     public void setOrderId(Integer orderId) {
         this.orderId = orderId;
-    }
-
-    public String getOrderFullName() {
-        return orderFullName;
-    }
-
-    public void setOrderFullName(String orderFullName) {
-        this.orderFullName = orderFullName;
-    }
-
-    public String getOrderFullAddress() {
-        return orderFullAddress;
-    }
-
-    public void setOrderFullAddress(String orderFullAddress) {
-        this.orderFullAddress = orderFullAddress;
-    }
-
-    public String getOrderContactNumber() {
-        return orderContactNumber;
-    }
-
-    public void setOrderContactNumber(String orderContactNumber) {
-        this.orderContactNumber = orderContactNumber;
-    }
-
-    public String getOrderAltContactNumber() {
-        return orderAltContactNumber;
-    }
-
-    public void setOrderAltContactNumber(String orderAltContactNumber) {
-        this.orderAltContactNumber = orderAltContactNumber;
     }
 
     public String getOrderStatus() {
@@ -92,19 +53,30 @@ public class Order {
         this.orderAmount = orderAmount;
     }
 
-    public Product getProduct() {
-        return product;
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
     }
 
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Users user) {
+    public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderId=" + orderId +
+                ", orderStatus='" + orderStatus + '\'' +
+                ", orderAmount=" + orderAmount +
+                ", orderItems=" + orderItems +
+                ", user=" + user +
+                '}';
     }
 }

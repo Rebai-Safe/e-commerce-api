@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.ecommerce.dao.RoleDao;
 import com.ecommerce.dao.UserDao;
 import com.ecommerce.entity.Role;
-import com.ecommerce.entity.Users;
+import com.ecommerce.entity.User;
 
 
 @Service
@@ -25,7 +25,7 @@ public class UserService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	public Users registerUser(Users user) {
+	public User registerUser(User user) {
         Role role = roleDao.findById("USER").get();
         Set<Role> userRoles = new HashSet<>();
         userRoles.add(role);
@@ -49,21 +49,17 @@ public class UserService {
         userRole.setRoleDescription("Default role for newly created record");
         roleDao.save(userRole);
 
-        Users adminUser = new Users();
+        User adminUser = new User();
         adminUser.setUserName("admin123");
         adminUser.setUserPassword(getEncodedPassword("admin@pass"));
-        adminUser.setUserFirstName("admin");
-        adminUser.setUserLastName("admin");
         Set<Role> adminRoles = new HashSet<>();
         adminRoles.add(adminRole);
         adminUser.setRoles(adminRoles);
         userDao.save(adminUser);
 
-        Users user = new Users();
+        User user = new User();
         user.setUserName("raj123");
         user.setUserPassword(getEncodedPassword("raj@123"));
-        user.setUserFirstName("raj");
-        user.setUserLastName("sharma");
         Set<Role> userRoles = new HashSet<>();
         userRoles.add(userRole);
         user.setRoles(userRoles);

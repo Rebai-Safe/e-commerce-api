@@ -1,7 +1,6 @@
 package com.ecommerce.controller;
 
 import com.ecommerce.entity.Order;
-import com.ecommerce.entity.OrderPlaceRequest;
 import com.ecommerce.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,16 +15,21 @@ public class OrderController {
     private OrderService orderService;
 
     @PreAuthorize("hasRole('USER')")
-    @PostMapping("/place-order/{isCartCheckout}")
-    public void placeOrder(@PathVariable boolean isCartCheckout,
-                           @RequestBody OrderPlaceRequest orderPlaceRequest){
-            orderService.placeOrder(orderPlaceRequest, isCartCheckout);
+    @PostMapping("/placeOrder")
+    public Order placeOrder(@RequestBody Order order){
+            return orderService.placeOrder(order);
     }
 
     @PreAuthorize("hasRole('USER')")
-    @GetMapping({"/getOrders"})
-    public List<Order> getOrders(){
-         return this.orderService.getOrders();
+    @GetMapping({"/getOrder/{orderId}"})
+    public Order getOrderById(@PathVariable Integer orderId){
+        return this.orderService.getOrderById(orderId);
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping({"/getUserOrders"})
+    public List<Order> getUserOrders(){
+         return this.orderService.getUserOrders();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
