@@ -1,12 +1,17 @@
 package com.ecommerce.service;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import com.ecommerce.dao.UserDao;
 import com.ecommerce.dto.UserDto;
+import com.ecommerce.entity.User;
+
 import com.ecommerce.mapper.UserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ecommerce.model.JwtRequest;
+import com.ecommerce.model.JwtResponse;
+import com.ecommerce.util.JwtUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
+
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,26 +21,25 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.ecommerce.dao.UserDao;
-import com.ecommerce.model.JwtRequest;
-import com.ecommerce.model.JwtResponse;
-import com.ecommerce.entity.User;
-import com.ecommerce.util.JwtUtil;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class JwtService implements UserDetailsService {
 
-	@Autowired
-	private UserDao userDao;
 
-	@Autowired
-	private JwtUtil jwtUtil;
+	private final UserDao userDao;
+	private final JwtUtil jwtUtil;
+	private final UserMapper userMapper;
+	private final AuthenticationManager authenticationManager;
+	private static final Logger LOGGER = LoggerFactory.getLogger(JwtService.class);
 
-	@Autowired
-	private UserMapper userMapper;
-
-	@Autowired
-	private AuthenticationManager authenticationManager;
+	public JwtService(UserDao userDao, JwtUtil jwtUtil, UserMapper userMapper, AuthenticationManager authenticationManager) {
+		this.userDao = userDao;
+		this.jwtUtil = jwtUtil;
+		this.userMapper = userMapper;
+		this.authenticationManager = authenticationManager;
+	}
 
 	public JwtResponse createJwtToken(JwtRequest jwtRequest) throws Exception {
 		String userName = jwtRequest.getUserName();
@@ -55,12 +59,16 @@ public class JwtService implements UserDetailsService {
 	private void authenticate(String username, String userPassword) throws Exception {
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, userPassword));
-		} catch (DisabledException e) {
-			throw new Exception("user is disabled");
-		} catch (BadCredentialsException e) {
-			throw new Exception("bad credentials from user");
+		} catch (Exception e) {
+			LOGGER.info("Bad credentials from user");
+			throw new com.ecommerce.exception.BadCredentialsException("bad credentials from user");
 		}
-
+//		catch (DisabledException e) {
+//			throw new Exception("user is disabled");
+//		} catch (BadCredentialsException e) {
+//			LOGGER.info("Bad credentials from user");
+//			throw new com.ecommerce.exception.BadCredentialsException("bad credentials from user");
+//		}
 	}
 
 	@Override

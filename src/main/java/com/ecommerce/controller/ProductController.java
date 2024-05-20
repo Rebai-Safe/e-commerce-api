@@ -20,8 +20,12 @@ import java.util.Set;
 @RestController
 public class ProductController {
 	
-	@Autowired
-	ProductService productService;
+
+	private final ProductService productService;
+
+	public ProductController(ProductService productService) {
+		this.productService = productService;
+	}
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping(value={"/addProduct"}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})

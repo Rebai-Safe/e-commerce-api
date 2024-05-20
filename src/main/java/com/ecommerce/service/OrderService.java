@@ -22,23 +22,19 @@ import java.util.List;
 public class OrderService {
 
 
-    @Autowired
-    private OrderDao orderDao;
 
-    @Autowired
-    private ProductDao productDao;
-
-    @Autowired
-    private UserDao userDao;
-
-    @Autowired
-    private CartDao cartDao;
-
-    @Autowired
-    private OrderMapper orderMapper;
-
-
+    private final OrderDao orderDao;
+    private final UserDao userDao;
+    private final CartDao cartDao;
+    private final OrderMapper orderMapper;
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
+
+    public OrderService(OrderDao orderDao, UserDao userDao, CartDao cartDao, OrderMapper orderMapper) {
+        this.orderDao = orderDao;
+        this.userDao = userDao;
+        this.cartDao = cartDao;
+        this.orderMapper = orderMapper;
+    }
 
     @Transactional
     public OrderDto placeOrder(Order order) {

@@ -17,9 +17,13 @@ import com.ecommerce.service.UserService;
 @RestController
 public class UserController {
 	
-	@Autowired
-	private UserService userService;
-	
+
+	private final UserService userService;
+
+	public UserController(UserService userService) {
+		this.userService = userService;
+	}
+
 	//	@PostConstruct
 	//	public void initRolesAndUsers() {
 	//		userService.initRolesAndUser();
@@ -39,7 +43,7 @@ public class UserController {
 
 	@PostMapping({"/registerUser"})
 	public ResponseEntity<ApiResponse> registerUser(@RequestBody User user) {
-		return  ApiResponseHandlerUtil.generateResponse("product created successfully",
+		return  ApiResponseHandlerUtil.generateResponse("user registered successfully",
 				HttpStatus.CREATED,
 				userService.registerUser(user));
 

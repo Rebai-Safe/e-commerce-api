@@ -18,9 +18,12 @@ import com.ecommerce.service.JwtService;
 @CrossOrigin
 public class JwtController {
 
-	@Autowired
-	private JwtService jwtService;
-	
+
+	private final JwtService jwtService;
+	public JwtController(JwtService jwtService) {
+		this.jwtService = jwtService;
+	}
+
 	@PostMapping(value = "/authenticate", produces = "application/json")
 	public ResponseEntity<ApiResponse> createJwtToken(@RequestBody JwtRequest jwtRequest) throws Exception{
 		return  ApiResponseHandlerUtil.generateResponse("user authenticated successfully",

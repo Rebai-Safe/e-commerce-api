@@ -22,18 +22,15 @@ import com.ecommerce.entity.Product;
 @Service
 public class ProductService {
 
-	@Autowired
-	ProductDao productDao;
 
-	@Autowired
-	UserDao userDao;
+	private final ProductDao productDao;
+	private final ProductMapper productMapper;
 
-	@Autowired
-	CartDao cartDao;
+	public ProductService(ProductDao productDao, ProductMapper productMapper) {
+		this.productDao = productDao;
+		this.productMapper = productMapper;
+	}
 
-	@Autowired
-	ProductMapper productMapper;
-	
 	public ProductDto addProduct(Product product) {
 		return productMapper.productToProductDto(productDao.save(product));
 	}

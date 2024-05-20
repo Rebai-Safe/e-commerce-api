@@ -16,16 +16,18 @@ import com.ecommerce.entity.User;
 @Service
 public class UserService {
 
-	@Autowired
-	private UserDao userDao;
-	
-	@Autowired
-	private RoleDao roleDao;
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private final UserDao userDao;
+    private final RoleDao roleDao;
+    private final PasswordEncoder passwordEncoder;
 
-	public User registerUser(User user) {
+    public UserService(UserDao userDao, RoleDao roleDao, PasswordEncoder passwordEncoder) {
+        this.userDao = userDao;
+        this.roleDao = roleDao;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public User registerUser(User user) {
         Role role = roleDao.findById("USER").get();
         Set<Role> userRoles = new HashSet<>();
         userRoles.add(role);

@@ -28,13 +28,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 	public static String CURRENT_USER = "";
 
-	@Autowired
-	private JwtUtil jwtUtil;
-	
-	@Autowired
-	private JwtService jwtService;
+
+	private final JwtUtil jwtUtil;
+	private final JwtService jwtService;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(JwtRequestFilter.class);
+
+	public JwtRequestFilter(JwtUtil jwtUtil, JwtService jwtService) {
+		this.jwtUtil = jwtUtil;
+		this.jwtService = jwtService;
+	}
+
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
