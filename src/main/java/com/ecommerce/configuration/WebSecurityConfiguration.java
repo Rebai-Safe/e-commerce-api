@@ -25,14 +25,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
 
-	@Autowired
-	private JwtRequestFilter jwtRequestFilter;
 
-	@Autowired
-    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+	private final JwtRequestFilter jwtRequestFilter;
+
+	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(WebSecurityConfiguration.class);
 
+
+	public WebSecurityConfiguration(JwtRequestFilter jwtRequestFilter, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
+		this.jwtRequestFilter = jwtRequestFilter;
+		this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+	}
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {

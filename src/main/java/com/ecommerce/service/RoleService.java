@@ -9,10 +9,13 @@ import com.ecommerce.entity.Role;
 
 @Service
 public class RoleService {
-	
-	@Autowired
-	private RoleDao  roleDao;
-	
+
+	private final RoleDao  roleDao;
+
+	public RoleService(RoleDao roleDao) {
+		this.roleDao = roleDao;
+	}
+
 	public Role createNewRole(Role role) {
 		return roleDao.save(role);
 	}

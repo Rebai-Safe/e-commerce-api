@@ -14,9 +14,13 @@ import com.ecommerce.service.RoleService;
 @RestController
 public class RoleController {
 	
-	@Autowired 
-	private RoleService roleService;
-	
+
+	private final RoleService roleService;
+
+	public RoleController(RoleService roleService) {
+		this.roleService = roleService;
+	}
+
 	@PostMapping({"/createNewRole"})
 	@ResponseBody
 	public Role createNewRole(@RequestBody Role role) {

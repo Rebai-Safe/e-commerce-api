@@ -15,8 +15,12 @@ import java.util.List;
 @RestController
 public class OrderController {
 
-    @Autowired
-    private OrderService orderService;
+
+    private final OrderService orderService;
+
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/placeOrder")
@@ -38,7 +42,7 @@ public class OrderController {
     @PreAuthorize("hasRole('USER')")
     @GetMapping({"/getUserOrders"})
     public ResponseEntity<ApiResponse> getUserOrders(){
-        return  ApiResponseHandlerUtil.generateResponse("order returned successfully",
+        return  ApiResponseHandlerUtil.generateResponse("orders returned successfully",
                 HttpStatus.OK,
                 orderService.getUserOrders());
 

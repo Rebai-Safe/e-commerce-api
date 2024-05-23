@@ -24,22 +24,22 @@ import java.util.stream.Collectors;
 @Service
 public class CartService {
 
-    @Autowired
-    private CartDao cartDao;
 
-    @Autowired
-    private ProductDao productDao;
-
-    @Autowired
-    private UserDao userDao;
-
-    @Autowired
-    private CartItemDao cartItemDao;
-
-    @Autowired
-    private CartMapper cartMapper;
+    private final CartDao cartDao;
+    private final ProductDao productDao;
+    private final UserDao userDao;
+    private final CartItemDao cartItemDao;
+    private final CartMapper cartMapper;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CartService.class);
+
+    public CartService(CartDao cartDao, ProductDao productDao, UserDao userDao, CartItemDao cartItemDao, CartMapper cartMapper) {
+        this.cartDao = cartDao;
+        this.productDao = productDao;
+        this.userDao = userDao;
+        this.cartItemDao = cartItemDao;
+        this.cartMapper = cartMapper;
+    }
 
     public CartDto addToCart(Integer productId, Integer quantity) {
         LOGGER.info("Adding item to cart");
