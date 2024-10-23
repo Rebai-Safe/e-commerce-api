@@ -30,12 +30,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 
 	private final JwtUtil jwtUtil;
-	private final JwtService jwtService;
+	private JwtService jwtService;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(JwtRequestFilter.class);
 
-	public JwtRequestFilter(JwtUtil jwtUtil, JwtService jwtService) {
+	public JwtRequestFilter(JwtUtil jwtUtil) {
 		this.jwtUtil = jwtUtil;
+	}
+
+	@Autowired
+	public void setJwtService(JwtService jwtService) {
 		this.jwtService = jwtService;
 	}
 

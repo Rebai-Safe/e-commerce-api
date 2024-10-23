@@ -26,16 +26,19 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
 
 
-	private final JwtRequestFilter jwtRequestFilter;
-
+	private  JwtRequestFilter jwtRequestFilter;
 	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(WebSecurityConfiguration.class);
 
 
-	public WebSecurityConfiguration(JwtRequestFilter jwtRequestFilter, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
-		this.jwtRequestFilter = jwtRequestFilter;
+	public WebSecurityConfiguration(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
 		this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+	}
+
+	@Autowired
+	public void setJwtRequestFilter(JwtRequestFilter jwtRequestFilter) {
+		this.jwtRequestFilter = jwtRequestFilter;
 	}
 
 	@Override
